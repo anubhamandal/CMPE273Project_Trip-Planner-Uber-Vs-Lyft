@@ -21,7 +21,7 @@ def index():
 # Trying with requst forms and with postman instead of browser arguments
     
 
-@app.route('/location', methods=['POST'])
+@app.route('/locations', methods=['POST'])
 def insert_user():
         json_data = json.loads(request.data)
         print json_data
@@ -68,7 +68,7 @@ def insert_user():
                 return json.dumps({'status':False})
 
 # this page called /v1/expenses/expense id can allow three methods - get, post and delete. 
-@app.route('/location/<location_id>', methods=['GET', 'PUT', 'DELETE' ])
+@app.route('/locations/<location_id>', methods=['GET', 'PUT', 'DELETE' ])
 def location_reset(location_id):
         if request.method == 'GET':
                 try:
