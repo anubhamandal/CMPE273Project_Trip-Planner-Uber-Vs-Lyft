@@ -200,5 +200,5 @@ func main() {
 	r.HandleFunc("/trips/{trip_id}/request", startTrip).Methods("PUT")
 
 	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":8081", r))
+	log.Fatal(http.ListenAndServe(":8082", r))
 }
