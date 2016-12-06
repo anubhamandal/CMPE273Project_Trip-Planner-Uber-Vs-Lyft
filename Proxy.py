@@ -17,8 +17,8 @@ import logging
 """CONSTANTS"""
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.INFO)
-LOG = logging.getLogger("Proxy.py")
+logging.basicConfig(file="planner.log", level=logging.INFO)
+LOG = logging.getLogger("Proxy")
 APPROVED_HOSTS = ["http://localhost:8081", "http://localhost:8082"]
 CURRENT_HOST = 0
 TRIPS_API = '/trips'
@@ -50,17 +50,20 @@ def post_locations():
     def func(count):
         url = get_host() + LOCATIONS_API
         LOG.info("Fetching %s", url)
-        r = post_request(url, request.get_data())
-        if r.status_code >= 500:
-            if count < len(APPROVED_HOSTS):
-                count += 1
-                LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                func(count)
+        try:
+            r = post_request(url, request.get_data())
+            if r.status_code >= 500:
+                if count < len(APPROVED_HOSTS):
+                    count += 1
+                    LOG.error("Error {}, Retrying {}".format(r.status_code, count))
+                    func(count)
+        except Exception as e:
+            return parse_exception(e)
         return parse_response(r)
     retry_count = 0
     return func(retry_count)
 
-"""GET LOCATION"""
+"""GET/UPDATE/DELETE LOCATION"""
 
 
 @app.route(LOCATIONS_API + '/<location_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -68,17 +71,20 @@ def change_locations(location_id):
     def func(count):
         url = get_host() + LOCATIONS_API + '/' + location_id
         LOG.info("Processing {} on {}".format(request.method, url))
-        if request.method == 'GET':
-            r = get_request(url)
-        elif request.method == 'DELETE':
-            r = delete_request(url)
-        elif request.method == 'PUT':
-            r = update_request(url, request.get_data())
-        if r.status_code >= 500:
-            if count < len(APPROVED_HOSTS):
-                count += 1
-                LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                func(count)
+        try:
+            if request.method == 'GET':
+                r = get_request(url)
+            elif request.method == 'DELETE':
+                r = delete_request(url)
+            elif request.method == 'PUT':
+                r = update_request(url, request.get_data())
+            if r.status_code >= 500:
+                if count < len(APPROVED_HOSTS):
+                    count += 1
+                    LOG.error("Error {}, Retrying {}".format(r.status_code, count))
+                    func(count)
+        except Exception as e:
+            return parse_exception(e)
         return parse_response(r)
     retry_count = 0
     return func(retry_count)
@@ -91,12 +97,15 @@ def post_trips():
     def func(count):
         url = get_host() + TRIPS_API
         LOG.info("Fetching %s", url)
-        r = post_request(url, request.get_data())
-        if r.status_code >= 500:
-            if count < len(APPROVED_HOSTS):
-                count += 1
-                LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                func(count)
+        try:
+            r = post_request(url, request.get_data())
+            if r.status_code >= 500:
+                if count < len(APPROVED_HOSTS):
+                    count += 1
+                    LOG.error("Error {}, Retrying {}".format(r.status_code, count))
+                    func(count)
+        except Exception as e:
+            return parse_exception(e)
         return parse_response(r)
     retry_count = 0
     return func(retry_count)
@@ -157,6 +166,11 @@ def parse_response(r):
     LOG.info("Response %s", r.status_code)
     resp = Response(r.text, status=r.status_code)
     return resp
+
+
+def parse_exception(e):
+    LOG.error(e.message)
+    return Response("Internal Error", status=500)
 
 """ MAIN """
 
