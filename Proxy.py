@@ -17,7 +17,7 @@ import logging
 """CONSTANTS"""
 
 app = Flask(__name__)
-logging.basicConfig(file="planner.log", level=logging.INFO)
+logging.basicConfig(filename="planner.log", level=logging.INFO)
 LOG = logging.getLogger("Proxy")
 APPROVED_HOSTS = ["http://localhost:8081", "http://localhost:8082"]
 CURRENT_HOST = 0
