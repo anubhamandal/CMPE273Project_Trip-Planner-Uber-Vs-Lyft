@@ -9,23 +9,17 @@ from sqlalchemy.exc import IntegrityError
 import os
 import sys
 import urllib2
-from flask import Flask, render_template, jsonify, request
 import requests
-from key import geo_key, lyft_key, uber_key
 import json
 from customClass import ProviderResult, app, PriceDiff
 
 
-geo_url = 'https://maps.googleapis.com/maps/api/geocode/json'
-lyft_url = 'https://api.lyft.com/v1/cost'
-uber_url = 'https://api.uber.com/v1.2/estimates/price'
-
 # initate flask app
 app = Flask(__name__)
 
-# @app.route('/')
-# def index():
-# 	return 'Hello World! Docker-Compose for Flask & Mysql\n'
+@app.route('/')
+def index():
+	return 'Hello! Uber vs Lyft Prices'
 
 #CHANGES TO INCLUDE METHODS
 # Trying with requst forms and with postman instead of browser arguments
@@ -108,18 +102,18 @@ def location_reset(location_id):
                 except AttributeError:
                         abort(404)
        
-@app.route('/')
-def index():
-	return 'Hello! Uber vs Lyft Prices'
-	
+# Post request for the Uber vs Lyft details
+# input format:
+# {
+    # "start": 1,
+    # "others" : [4,5,6],
+    # "end": 1
+# }	
 @app.route("/trips/", methods=["POST"])
 def getPrice():
-	val = json.loads(request.data)
-	var = ProviderResult(val)
+	val = json.loads(request.data)				# Input
+	var = ProviderResult(val)					# Class for calculating the Uber and Lyft details
 	x = var.genOutput()
-	# var = PriceDiff(val)
-	# x = var.printPts()
-	# x = var.getLatLng()
 	return x                        
                         
 
@@ -129,4 +123,4 @@ def app_status():
 
 #run app service 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0',port=5002, debug=True)
+	app.run(host='0.0.0.0',port=5000, debug=True)
