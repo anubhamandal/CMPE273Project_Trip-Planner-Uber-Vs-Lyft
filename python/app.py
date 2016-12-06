@@ -109,7 +109,7 @@ def location_reset(location_id):
     # "others" : [4,5,6],
     # "end": 1
 # }	
-@app.route("/trips/", methods=["POST"])
+@app.route("/trips", methods=["POST"])
 def getPrice():
 	val = json.loads(request.data)				# Input
 	var = ProviderResult(val)					# Class for calculating the Uber and Lyft details
