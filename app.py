@@ -60,7 +60,7 @@ def insert_user():
         longitude = location_data['lng']
         #print 'longitude is'
         #print longitude
-        database = CreateDB(hostname = 'cmpe281.cdohyjg9mydw.us-west-2.rds.amazonaws.com')
+        database = CreateDB(hostname = '')
         db.create_all()
         try:
                 location = Location(json_data['name'],
