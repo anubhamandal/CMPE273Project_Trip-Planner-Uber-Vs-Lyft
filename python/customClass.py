@@ -8,10 +8,10 @@ from tsp_dp import shortestPath
 
 mysql = MySQL()
 app = Flask(__name__)
-app.config['MYSQL_DATABASE_USER'] = 'user281'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'aplusgrade'
-app.config['MYSQL_DATABASE_DB'] = '273project'
-app.config['MYSQL_DATABASE_HOST'] = 'cmpe281.cdohyjg9mydw.us-west-2.rds.amazonaws.com'
+app.config['MYSQL_DATABASE_USER'] = ''
+app.config['MYSQL_DATABASE_PASSWORD'] = ''
+app.config['MYSQL_DATABASE_DB'] = ''
+app.config['MYSQL_DATABASE_HOST'] = ''
 mysql.init_app(app)
 					
 lyft_url = 'https://api.lyft.com/v1/cost'
