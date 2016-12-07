@@ -27,7 +27,7 @@ manager.add_command('db', MigrateCommand)
 
 class Location(db.Model):
 
-	# Data Model User Table
+	##Data Model Table
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String(120), unique=False)
         address = db.Column(db.String(120), unique=False)
@@ -38,7 +38,7 @@ class Location(db.Model):
         lng = db.Column(db.Float , unique=False)
 
 	def __init__(self,name,address,city,state,zip,lat,lng):
-		# initialize columns
+		
 		self.name = name
 		self.address = address
 		self.city = city
@@ -50,7 +50,7 @@ class Location(db.Model):
 	def __repr__(self):
 		return '<location %r>' % self.name
 
-# db.execute executes sql query like CREATE DATABASE IF NOT EXISTS etc.
+## db.execute executes sql query like CREATE DATABASE IF NOT EXISTS etc.
 
 
 class CreateDB():
