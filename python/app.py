@@ -24,9 +24,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return 'Hello! Welcome to Uber vs Lyft Prices Estimation service'
+	return 'Hello! Welcome to Uber vs Lyft Prices Estimation services'
 
-##POST METHOD FOR locations
+##POST METHOD FOR locations using Google Maps API
     
 
 @app.route('/locations', methods=['POST'])
@@ -70,7 +70,7 @@ def insert_user():
         except IntegrityError:
                 return json.dumps({'status':False})
 
-##GET PUT and DELETE METHODS FOR locations
+##GET PUT and DELETE METHODS FOR locations 
  
 @app.route('/locations/<location_id>', methods=['GET', 'PUT', 'DELETE' ])
 def location_reset(location_id):

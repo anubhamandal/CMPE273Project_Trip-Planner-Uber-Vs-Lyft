@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 
-# Database Configurations
+# AWS RDS Database Configurations details
 app = Flask(__name__)
 DATABASE = ''
 PASSWORD = ''
@@ -18,7 +18,7 @@ HOSTNAME = ''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s/%s'%(USER, PASSWORD, HOSTNAME, DATABASE)
 db = SQLAlchemy(app)
 
-# Database migration command line
+##Database migration command line
 
 
 migrate = Migrate(app, db)
@@ -27,7 +27,7 @@ manager.add_command('db', MigrateCommand)
 
 class Location(db.Model):
 
-	##Data Model Table
+	##Data Model Table AND STRCUTURE 
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String(120), unique=False)
         address = db.Column(db.String(120), unique=False)
@@ -50,7 +50,7 @@ class Location(db.Model):
 	def __repr__(self):
 		return '<location %r>' % self.name
 
-## db.execute executes sql query like CREATE DATABASE IF NOT EXISTS etc.
+## db.execute executes sql query like CREATE DATABASE IF NOT EXISTS IN THE DATABASE
 
 
 class CreateDB():
