@@ -1,3 +1,8 @@
+"""application using Google Maps API, Uber API and Lyft API for getting locations latitude logitude
+and for trip planning, price estimation and for providing  available products counts of Uber and Lyft"""
+
+
+
 from flask import Flask, abort
 from flask import request
 from model import db
@@ -14,15 +19,14 @@ import json
 from customClass import ProviderResult, app, PriceDiff
 
 
-# initate flask app
+##initate flask app
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return 'Hello! Uber vs Lyft Prices'
+	return 'Hello! Welcome to Uber vs Lyft Prices Estimation service'
 
-#CHANGES TO INCLUDE METHODS
-# Trying with requst forms and with postman instead of browser arguments
+##POST METHOD FOR locations
     
 
 @app.route('/locations', methods=['POST'])
@@ -30,30 +34,25 @@ def insert_user():
         json_data = json.loads(request.data)
         print json_data
         x = json_data['address']
-        # x is '3700 Casa Verde St'
         x = x.replace(' ','+')
-        # now x is '3700+Casa+Verde+St'
+        
         y = json_data['city']
         y = y.replace(' ','+')
-        # y is 'San Jose'
+        
         z = json_data['state']
-        # z is 'CA'
+        
         a = str(json_data['zip'])
         string_for_google = x+'+'+y+'+'+z+'+'+a
-        # string_for_google is '3700+Casa+Verde+St+San+Jose+CA+95134'
+        
         apidata = json.load(urllib2.urlopen('http://maps.google.com/maps/api/geocode/json?address=%s&sensor=False'%(string_for_google)))
-        #print 'apidata received'
-        #print apidata
-        #print '---------'
+        
+       
         data = apidata['results'][0]
         geometry_data = data['geometry']
         location_data = geometry_data['location']
         latitude = location_data['lat']
-        #print 'latitude is'
-        #print latitude
         longitude = location_data['lng']
-        #print 'longitude is'
-        #print longitude
+        
         database = CreateDB(hostname = '')
         db.create_all()
         try:
@@ -71,7 +70,8 @@ def insert_user():
         except IntegrityError:
                 return json.dumps({'status':False})
 
-# this page called /v1/expenses/expense id can allow three methods - get, post and delete. 
+##GET PUT and DELETE METHODS FOR locations
+ 
 @app.route('/locations/<location_id>', methods=['GET', 'PUT', 'DELETE' ])
 def location_reset(location_id):
         if request.method == 'GET':
@@ -101,6 +101,8 @@ def location_reset(location_id):
                         return json.dumps({'name':location_update.name}),202
                 except AttributeError:
                         abort(404)
+             
+"""GET METHOD FOR UBER PRODUCTS """                       
        
 
 @app.route('/uberproductsnear/<location_id>', methods=['GET'])
@@ -128,6 +130,8 @@ def location_uberproducts(location_id):
     # "others" : [4,5,6],
     # "end": 1
 # }	
+##POST METHOD FOR TRIPS BASED ON location_id
+
 @app.route("/trips", methods=["POST"])
 def getPrice():
 	val = json.loads(request.data)				# Input
@@ -140,6 +144,7 @@ def getPrice():
 def app_status():
 	return json.dumps({'server_info':application.config['SQLALCHEMY_DATABASE_URI']})
 
-#run app service 
+##run app service 
+
 if __name__ == "__main__":
 	app.run(host='0.0.0.0',port=5000, debug=True)
