@@ -122,6 +122,23 @@ def location_uberproducts(location_id):
                         return json.dumps({'Cars nearby':total_products})
                 except AttributeError:
                         abort(404)
+
+@app.route('/lyftproductsnear/<location_id>', methods=['GET'])
+def location_lyftproducts(location_id):
+                try:
+                        location_get = Location.query.filter_by(id=location_id).first()
+                        
+                        url = 'http://api.lyft.com/v1/ridetypes?lat=%s&lng=%s'%(location_get.lat,location_get.lng)
+                        #print url
+                        lyft_server_token = ''
+                        lyft_payload = {'latitude':location_get.lat, 'longitude':location_get.lng}
+                        lyft_header = {'Authorization':lyft_server_token, 'Accept-Language':'en_US', 'Content-Type':'application/json'}
+                        lyft_usearch_req = requests.get(url, params=lyft_payload, headers=lyft_header)
+                        apidata = lyft_usearch_req.json()
+                        total_products = len(apidata["ride_types"])
+                        return json.dumps({'Cars nearby':total_products})
+                except AttributeError:
+                        abort(404)                        
                         
 # Post request for the Uber vs Lyft details
 # input format:
