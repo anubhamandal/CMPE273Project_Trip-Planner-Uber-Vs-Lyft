@@ -24,6 +24,8 @@ CURRENT_HOST = 0
 TRIPS_API = '/trips'
 LOCATIONS_API = '/locations'
 HOSTS_API = '/hosts'
+UBER_PRODUCTS_NEARBY_API = '/uberproductsnear'
+LYFT_PRODUCTS_NEARBY_API = '/lyftproductsnear'
 
 
 def get_host():
@@ -109,6 +111,56 @@ def post_trips():
         LOG.info("Fetching %s", url)
         try:
             r = post_request(url, request.get_data())
+            if r.status_code >= 500:
+                if count < len(APPROVED_HOSTS):
+                    count += 1
+                    LOG.error("Error {}, Retrying {}".format(r.status_code, count))
+                    r = func(count)
+        except requests.ConnectionError as e:
+            if count < len(APPROVED_HOSTS):
+                count += 1
+                LOG.error("Error {}, Retrying {}".format(e.message, count))
+                r = func(count)
+            else:
+                r = parse_exception(e)
+        return r
+    retry_count = 1
+    return parse_response(func(retry_count))
+
+"""PRODUCTS NEAR YOU"""
+
+
+@app.route(UBER_PRODUCTS_NEARBY_API + '/<location_id>', methods=['GET'])
+def get_uber_products(location_id):
+    def func(count):
+        url = get_host() + UBER_PRODUCTS_NEARBY_API + '/' + location_id
+        LOG.info("Fetching %s", url)
+        try:
+            r = get_request(url)
+            if r.status_code >= 500:
+                if count < len(APPROVED_HOSTS):
+                    count += 1
+                    LOG.error("Error {}, Retrying {}".format(r.status_code, count))
+                    r = func(count)
+        except requests.ConnectionError as e:
+            if count < len(APPROVED_HOSTS):
+                count += 1
+                LOG.error("Error {}, Retrying {}".format(e.message, count))
+                r = func(count)
+            else:
+                r = parse_exception(e)
+        return r
+    retry_count = 1
+    return parse_response(func(retry_count))
+
+
+@app.route(LYFT_PRODUCTS_NEARBY_API + '/<location_id>', methods=['GET'])
+def get_lyft_products(location_id):
+    def func(count):
+        url = get_host() + LYFT_PRODUCTS_NEARBY_API + '/' + location_id
+        LOG.info("Fetching %s", url)
+        try:
+            r = get_request(url)
             if r.status_code >= 500:
                 if count < len(APPROVED_HOSTS):
                     count += 1
