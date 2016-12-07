@@ -59,7 +59,7 @@ class CreateDB():
 			HOSTNAME = hostname
 		import sqlalchemy
 		engine = sqlalchemy.create_engine('mysql://%s:%s@%s'%(USER, PASSWORD, HOSTNAME)) # connect to server
-		#engine.execute("DROP DATABASE IF EXISTS %s "%(DATABASE)) #delete db if an existing db is present. to get a new database for every time test is run.
+		
 		engine.execute("CREATE DATABASE IF NOT EXISTS %s "%(DATABASE)) #create db
 
 if __name__ == '__main__':
