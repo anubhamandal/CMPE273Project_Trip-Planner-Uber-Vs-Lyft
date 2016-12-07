@@ -17,9 +17,9 @@ import logging
 """CONSTANTS"""
 
 app = Flask(__name__)
-logging.basicConfig(filename="planner.log", level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger("Proxy")
-APPROVED_HOSTS = ["http://localhost:8081", "http://localhost:8082"]
+APPROVED_HOSTS = ["http://localhost:8080", "http://localhost:8082", "http://localhost:8081"]
 CURRENT_HOST = 0
 TRIPS_API = '/trips'
 LOCATIONS_API = '/locations'
@@ -56,12 +56,17 @@ def post_locations():
                 if count < len(APPROVED_HOSTS):
                     count += 1
                     LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                    func(count)
-        except Exception as e:
-            return parse_exception(e)
-        return parse_response(r)
-    retry_count = 0
-    return func(retry_count)
+                    r = func(count)
+        except requests.ConnectionError as e:
+            if count < len(APPROVED_HOSTS):
+                count += 1
+                LOG.error("Error {}, Retrying {}".format(e.message, count))
+                r = func(count)
+            else:
+                r = parse_exception(e)
+        return r
+    retry_count = 1
+    return parse_response(func(retry_count))
 
 """GET/UPDATE/DELETE LOCATION"""
 
@@ -82,12 +87,17 @@ def change_locations(location_id):
                 if count < len(APPROVED_HOSTS):
                     count += 1
                     LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                    func(count)
-        except Exception as e:
-            return parse_exception(e)
-        return parse_response(r)
-    retry_count = 0
-    return func(retry_count)
+                    r = func(count)
+        except requests.ConnectionError as e:
+            if count < len(APPROVED_HOSTS):
+                count += 1
+                LOG.error("Error {}, Retrying {}".format(e.message, count))
+                r = func(count)
+            else:
+                r = parse_exception(e)
+        return r
+    retry_count = 1
+    return parse_response(func(retry_count))
 
 """POST TRIP"""
 
@@ -103,12 +113,17 @@ def post_trips():
                 if count < len(APPROVED_HOSTS):
                     count += 1
                     LOG.error("Error {}, Retrying {}".format(r.status_code, count))
-                    func(count)
-        except Exception as e:
-            return parse_exception(e)
-        return parse_response(r)
-    retry_count = 0
-    return func(retry_count)
+                    r = func(count)
+        except requests.ConnectionError as e:
+            if count < len(APPROVED_HOSTS):
+                count += 1
+                LOG.error("Error {}, Retrying {}".format(e.message, count))
+                r = func(count)
+            else:
+                r = parse_exception(e)
+        return r
+    retry_count = 1
+    return parse_response(func(retry_count))
 
 """HOSTS"""
 
@@ -164,7 +179,10 @@ def update_request(url, json_data):
 
 def parse_response(r):
     LOG.info("Response %s", r.status_code)
-    resp = Response(r.text, status=r.status_code)
+    if r.status_code != 500:
+        resp = Response(r.text, status=r.status_code)
+    else:
+        resp = Response("Internal Error", status=r.status_code)
     return resp
 
 
