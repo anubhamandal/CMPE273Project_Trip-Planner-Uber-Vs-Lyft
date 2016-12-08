@@ -28,7 +28,7 @@
   <p>These are the locations included in your trip.</p>  
 
   <br>
-  id : 
+  id : {{trip['id']}}
   <br>
   Start : {{trip['start']}}
   <br>
@@ -57,7 +57,7 @@
         <td>{{value['total_distance']}}</td>
         <td>{{value['distance_unit']}}</td>
       </tr>
-      <% end for %>
+      {% endfor %}
     </tbody>
   </table>
   
