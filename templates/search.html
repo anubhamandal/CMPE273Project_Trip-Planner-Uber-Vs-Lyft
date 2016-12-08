@@ -56,9 +56,14 @@
   
 </div>
 
+<div class = "form1">
 <form name = "buttonform" action = "{{url_for('update_locations', location_id = lid)}}" method = "POST">
   <input type = "hidden" name = "lname" class = "form-control" value = {{data['name']}}>
   <input type = "hidden" name = "lid" class = "form-control" value = {{data['id']}}>
   <button type="submit" value = "Delete" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Delete</button>
   <button type="submit" value = "Update" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Update</button>
 </form>
+</div>
+
+</body>
+</html>
