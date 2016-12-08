@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Trip Planner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel = "stylesheet" href="{{ url_for('static', filename='css/style.css') }}"  type = "text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Trip Planner</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{url_for('index')}}">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class = "container tripList">
+<h2>Trip ID : 1</h2>
+  <p>These are the the details of your new trip</p>  
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Zip</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" name = "name" class="form-control" value = {{data['name']}}  ></td>
+        <td>{{data['address']}}</td>
+        <td>{{data['city']}}</td>
+        <td>{{data['state']}}</td>
+        <td>{{data['zip']}}</td>
+      </tr>
+    </tbody>
+  </table>

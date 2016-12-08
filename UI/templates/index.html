@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Trip Planner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel = "stylesheet" href="{{ url_for('static', filename='css/style.css') }}"  type = "text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Trip Planner</a>
+    </div>
+    <form action = "{{url_for('search')}}" method="POST" role="form" class="navbar-form navbar-left">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search Location" name = "location"> 
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="active"><a href="index.html">Home</a></li>
+      <li><a href="#">Manage Locations</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Content -->
+  <div class = "row-fluid">
+    <div class = "col-md-9 content text-center">
+      <div class = "trip-text-box">
+        <h1>Plan your trips,<br>Worry free</h1>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newTrip">Plan Trip</button>
+
+        <!-- Modal -->
+        <div id="newTrip" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content" id = "map_modal">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Trip</h4>
+              </div>
+              <div class="modal-body">
+                <form action="{{url_for('post_locations')}}" method="POST" role="form" class="form-horizontal">
+                <div class="form-group">
+                 
+                  <label for="name">Name</label>
+                  <input class = "form-control" type = "text" name = "name" required/><br>
+                  <label for="address">Address</label>
+                  <input class = "form-control" type = "text" name = "address" required/><br>
+                  <label for="city">City</label>
+                  <input class = "form-control" type = "text" name = "city" required/><br>
+                  <label for="state">State</label>
+                  <input class = "form-control" type = "text" name = "state" required/><br>
+                  <label for="zip">Zip</label>
+                  <input class = "form-control" type = "text" name = "zip" required/><br>
+                </div>
+              </div>
+              <!-- Inner Modal Buttons -->
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+              </form>
+            </div>
+
+          </div>
+        </div> &nbsp;
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#oldTrip">Create a New Trip</button>
+
+      <div>
+        <!-- Modal -->
+        <div id="oldTrip" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create a New Trip</h4>
+              </div>
+              <div class="modal-body">
+                <form action="{{url_for('post_trips')}}" method="POST" role="form" class="form-horizontal">
+                  <label for="comment">Create a new Trip</label><br>
+                    <label for="start">Starting Point</label>
+                    <input class = "form-control" type = "text" name = "start" required/><br>
+                    <label for="others">Transit</label>
+                    <textarea class = "form-control" name = "others"/></textarea><br>
+                    <label for="end">Ending Point</label>
+                    <input class = "form-control" type = "text" name = "end" required/><br>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</body>
+</html>

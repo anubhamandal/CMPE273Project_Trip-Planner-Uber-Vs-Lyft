@@ -1,0 +1,83 @@
+ html {
+    background-color: #fff;
+    color: #555;
+    font-size: 20px;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(Images/road.jpg);
+    background-size: 100%;
+
+}
+
+ body { 
+ 	color: #fff;
+ background:url('kermit.jpg') center center no-repeat;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: 100%;
+width: 100%;
+max-width: 1920px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar{
+	padding-right: 13%;
+	padding-left: 5%;
+}
+
+.modal {
+	color: #555;
+}
+
+.content {
+      vertical-align:middle;
+      margin-top: 10%;
+
+}
+
+.recent{
+	margin-top: 2%;
+}
+
+h2{
+	border-bottom: solid 1px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+	text-align: center;
+}
+
+
+.table a:hover{
+	color:#ff0000;
+	text-decoration: none;
+}
+
+.tripList{
+	margin-top: 5%;
+}
+
+.table{
+	margin-top: 4%;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #555555;
+}
+
+.btn{
+	text-align: right;
+	margin-left: 50%;
+}
+
+
+

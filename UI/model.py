@@ -4,7 +4,10 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from datetime import datetime
 
-# AWS RDS Database Configurations details
+
+
+
+# Database Configurations
 app = Flask(__name__)
 DATABASE = ''
 PASSWORD = ''
@@ -15,7 +18,7 @@ HOSTNAME = ''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s/%s'%(USER, PASSWORD, HOSTNAME, DATABASE)
 db = SQLAlchemy(app)
 
-##Database migration command line
+# Database migration command line
 
 
 migrate = Migrate(app, db)
@@ -24,7 +27,7 @@ manager.add_command('db', MigrateCommand)
 
 class Location(db.Model):
 
-	##Data Model Table AND STRCUTURE 
+	##Data Model Table
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String(120), unique=False)
         address = db.Column(db.String(120), unique=False)
@@ -47,25 +50,7 @@ class Location(db.Model):
 	def __repr__(self):
 		return '<location %r>' % self.name
 
-        
-class Trips(db.Model):
-
-	# Data Model Trips Table
-        id = db.Column(db.Integer, primary_key=True)
-        start = db.Column(db.Integer, unique=False)
-        others = db.Column(db.String(50), unique=False)
-        end = db.Column(db.Integer , unique=False)
-
-	def __init__(self,start,end,others):
-		# initialize columns
-		self.start = start
-		self.others = others
-		self.end = end
-		
-	def __repr__(self):
-		return '<location %r>' % self.start
-
-## db.execute executes sql query like CREATE DATABASE IF NOT EXISTS IN THE DATABASE
+## db.execute executes sql query like CREATE DATABASE IF NOT EXISTS etc.
 
 
 class CreateDB():
@@ -74,7 +59,7 @@ class CreateDB():
 			HOSTNAME = hostname
 		import sqlalchemy
 		engine = sqlalchemy.create_engine('mysql://%s:%s@%s'%(USER, PASSWORD, HOSTNAME)) # connect to server
-		
+		#engine.execute("DROP DATABASE IF EXISTS %s "%(DATABASE)) #delete db if an existing db is present. to get a new database for every time test is run.
 		engine.execute("CREATE DATABASE IF NOT EXISTS %s "%(DATABASE)) #create db
 
 if __name__ == '__main__':

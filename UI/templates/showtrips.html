@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Trip Planner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel = "stylesheet" href="{{ url_for('static', filename='css/style.css') }}"  type = "text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Trip Planner</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{url_for('index')}}">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class = "container tripList">
+<h2>Location</h2>
+  <p>These are the locations included in your trip.</p>  
+
+  <br>
+  id : {{trip['id']}}
+  <br>
+  Start : {{trip['start']}}
+  <br>
+  End : {{trip['end']}}
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Total Costs By Cheapest Car Type</th>
+        <th>Currency Code</th>
+        <th>Total Duration</th>
+        <th>Duration Unit</th>
+        <th>Total Distance</th>
+        <th>Distance Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for value in providers %}
+      <tr>
+        <td>{{value['name']}}</td>
+        <td>{{value['total_costs_by_cheapest_car_type']}}</td>
+        <td>{{value['currency_code']}}</td>
+        <td>{{value['total_duration']}}</td>
+        <td>{{value['duration_unit']}}</td>
+        <td>{{value['total_distance']}}</td>
+        <td>{{value['distance_unit']}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+</div>
