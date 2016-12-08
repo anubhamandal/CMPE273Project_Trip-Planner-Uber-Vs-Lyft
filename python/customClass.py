@@ -182,17 +182,17 @@ class PriceDiff():
 
 # Class for output generation
 class ProviderResult():	
-	def __init__(self,myDict):
+	def __init__(self,myDict,myID):
 		self._myDict = myDict
-		#self._myID = myID
+		self._myID = myID
 		
 	@property
 	def myDict(self):
 		return self._myDict
 	
-	# @property
-	# def myID(self):
-		# return self._myID
+	@property
+	def myID(self):
+		return self._myID
 		
 	def genOutput(self):
 		input = PriceDiff(self.myDict)
@@ -228,7 +228,7 @@ class ProviderResult():
             "distance_unit": "mile"
 			}
 		resp = {
-			"id" : 2000,					#need to feed this in db and get the id 
+			"id" : self.myID,					#need to feed this in db and get the id 
 			"start" : self.myDict['start'],
 			"providers" : [
 							uberDetails,

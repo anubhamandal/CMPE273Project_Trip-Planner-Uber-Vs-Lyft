@@ -7,6 +7,7 @@ from flask import Flask, abort
 from flask import request
 from model import db
 from model import Location
+from model import Trips
 from model import CreateDB
 from model import app as application
 import simplejson as json
@@ -151,12 +152,19 @@ def location_lyftproducts(location_id):
 
 @app.route("/trips", methods=["POST"])
 def getPrice():
-	val = json.loads(request.data)				# Input
-	var = ProviderResult(val)					# Class for calculating the Uber and Lyft details
-	x = var.genOutput()
-	return x                        
-                        
+    val = json.loads(request.data)# Input
+    x =" ".join(str(x) for x in val['others'])
+    trips = Trips(val['start'],
+                  x,
+                  val['end'])
+    db.session.add(trips)
+    db.session.commit()
+    trip_id=trips.id
+    var = ProviderResult(val,trip_id)     # Class for calculating the Uber and Lyft details
+    trip_output = var.genOutput()
+    return trip_output
 
+    
 @app.route('/info')
 def app_status():
 	return json.dumps({'server_info':application.config['SQLALCHEMY_DATABASE_URI']})
